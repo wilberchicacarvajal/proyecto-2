@@ -19,7 +19,7 @@ module.exports = (env, argv) => {
             index: './src/index.js',
         },
         output: {
-            filename: '[name].js',
+            filename: '[name].[contenthash].js',
             path: path.resolve(__dirname, 'dist')
         },
         module: {
@@ -44,7 +44,14 @@ module.exports = (env, argv) => {
                 }
             ]
         },
-        plugins: [],
+        plugins: [
+            new HtmlwebpackPlubing({
+                template: './src/index..html',
+                chunks: ['index']
+            }),
+            //para que sirve un spread operator
+            ...(IsProduction ? [new MiniCssExtractPlugin({ filename: 'assets/css/[name].[contenthash].css' })] : [])
+        ],
         devServer: {
             static: {
                 directory: path.join(__dirname, 'dist'),
