@@ -1,19 +1,17 @@
-// sirve para identificar la ruta de donde se encuentra este archivo 
-const path = requiere('path');
+// Sirve para identificar la ruta de donde se encuentra este archivo
+const path = require('path');
 
-//me permite trabajar con documentos html//
-const HtmlwebpackPlubing = requiere('html-webpack-plugin');
+// Me permite trabajar con documentos html
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-// estrae el codigo css, minificarlos y optimizarlos.Ademas lo agrega como parte de heade
-const MiniCssExtractPlugin = ('mini-css-extract-plugin')
+// Extraer el código css, minificarlo y optimizarlo. Ademas lo agrega como parte del head
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-//nos permite copiar archivos de una ruta o otra
-const CopyWebpackPlugin = requiere('copy-webpack-plugin')
+// Nos permite copiar archivos de una ruta a otra
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = (env, argv) => {
-    // operadores en javascript, que diferencia existe entre el operador == y el ===
-    const IsProduction = argv.mode === 'production';
-
+    const isProduction = argv.mode === 'production';
     return {
         entry: {
             index: './src/index.js',
@@ -24,11 +22,10 @@ module.exports = (env, argv) => {
         },
         module: {
             rules: [
-
                 {
                     test: /\.css$/,
                     use: [
-                        IsProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+                        isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
                         'css-loader'
                     ]
                 },
@@ -38,19 +35,19 @@ module.exports = (env, argv) => {
                     use: {
                         loader: 'babel-loader',
                         options: {
-                            presents: ['@babel/preset-env']
+                            presets: ['@babel/preset-env']
                         }
                     }
                 }
             ]
         },
         plugins: [
-            new HtmlwebpackPlubing({
-                template: './src/index..html',
+            new HtmlWebpackPlugin({
+                template: './src/index.html',
                 chunks: ['index']
             }),
-            //para que sirve un spread operator
-            ...(IsProduction ? [new MiniCssExtractPlugin({ filename: 'assets/css/[name].[contenthash].css' })] : [])
+            // averiguar que significa un spread operator
+            ...(isProduction ? [new MiniCssExtractPlugin({ filename: 'assets/css/[name].[contenthash].css' })] : [])
         ],
         devServer: {
             static: {
@@ -62,6 +59,5 @@ module.exports = (env, argv) => {
                 'src/**/*'
             ]
         }
-    }
-
+    };
 }
