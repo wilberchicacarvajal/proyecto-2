@@ -17,13 +17,50 @@
 
         <section class="row text-center">
             <article class="col-xs-12 col-md-6">
-                <img src="./assets/img/teachers.jpg" alt="profesores">
+
+                <img class ="img-fluid rounded" src="./assets/img/teachers.jpg" alt="profesores">
+
             </article>
             <article class="col-xs-12 col-md-6">
-                Formulario
+                
+                <form novalidate class="form-floating" id="teacherForm">
+
+                    <div class="form-floating mb-3">
+                        <input type="text" id="txtName" name="txtName" placeholder="Ejm: wilber" class="form-control">
+                        <label for="txtName">nombre</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <textarea name="txtDescription" id="txtDescription" cols="30" rows="10" class="form-control"></textarea>
+                        <label for="txtDescription">Descripción</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input type="email" id="txtEmail" name="txtEmail" placeholder="Ejm: wilber@gmail.com" class="form-control">
+                        <label for="txtEmail">correo electrónico</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input type="date" id="txtBirthDate" name="txtBirthDate" placeholder="Ejm: 28/11/2001" class="form-control">
+                        <label for="txtBirthDate">Fecha de nacimiento</label>
+                    </div>
+
+                    <div class="row">
+                        <div class="d-grid col-md-6">
+                            <button id="reset" class="btn btn-secondary">Cancelar</button>
+                        </div>
+                        <div class="d-grid col-md-6">
+                            <button type="submit" class="btn btn-success">Enviar</button>
+                           
+                        </div>
+                    </div>
+
+                </form>
+
             </article>
         </section>
-        <section class="row">
+
+        <section class="row mt-3">
 
             <div class="col-12">
 
@@ -67,10 +104,10 @@
                                     102030
                                 </td>
                                 <td>
-                                    Yhoan Galeano
+                                    wilber chica
                                 </td>
                                 <td>
-                                    Da clases de frontend en la upb
+                                    estudiante frontend en la upb
                                 </td>
                                 <td>
                                     y@g.com
@@ -101,7 +138,7 @@
     </main>
 
     <footer>
-        Derechos reservados por Yhoan <em class="fa-regular fa-copyright"></em>
+        Derechos reservados por wilber <em class="fa-regular fa-copyright"></em>
     </footer>
 
 </body>
