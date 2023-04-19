@@ -1,3 +1,4 @@
 import './assets/css/index.css';
+import{ initializeApp } from './assets/js/teachers/app';
 
-console.log('hola, ya me puede ver')
+initializeApp();
