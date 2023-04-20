@@ -1,8 +1,10 @@
 // encargado de acceder a la base de datos
-export function getDatabase(){
-    return localStorage.getItem('db_teachers');
+
+export function getDatabase(dbName) {
+    const database = JSON.parse(localStorage.getItem(dbName));
+    return database === null ? [] : database;
 }
 
-export function setDatabase(teachers) {
-    localStorage.setItem('db_teachers', teachers);
+export function setDatabase(dbName, JsonData) {
+    localStorage.setItem(dbName, JSON.stringify(JsonData));
 }
