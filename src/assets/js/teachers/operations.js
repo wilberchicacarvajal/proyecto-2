@@ -22,9 +22,12 @@ function listTeachers() { // esto es para listar a los profesores
     const tbody = document.querySelector('#tblTeachers tbody');
     tbody.innerHTML = '';
 
+    if (arrayTeachers.length > 0 ) {
+
+
     arrayTeachers.forEach( (teacher, index) => {  //foreach me retorna o recorre cada posición del objeto y su posición
 
-        const {name, description, email, birthDate} = teacher; // esto se llama desestructuración permite desempacar valores o arreglos o propiedades de objetos de distintas variables
+        const { id, name, description, email, birthDate } = teacher; // esto se llama desestructuración permite desempacar valores o arreglos o propiedades de objetos de distintas variables
         
 
         // creo la fila 
@@ -33,7 +36,7 @@ function listTeachers() { // esto es para listar a los profesores
 
         // creo las columnas 
         const colId = document.createElement('td');
-        colId.textContent = index;
+        colId.textContent = id;
         colId.classList.add('text-center');
 
         const colName = document.createElement('td');
@@ -53,7 +56,7 @@ function listTeachers() { // esto es para listar a los profesores
 
         const editButton = document.createElement('button');
         editButton.classList.add('btn', 'btn-primary', 'btn-edit', 'm-1');
-        editButton.dataset.id = index;
+        editButton.dataset.id = id;
         editButton.setAttribute('title', 'Editar');
         editButton.setAttribute('type', 'button')
 
@@ -65,7 +68,7 @@ function listTeachers() { // esto es para listar a los profesores
 
         const deleteButton = document.createElement('button');
         deleteButton.classList.add('btn', 'btn-danger', 'btn-delete', 'm-1');
-        deleteButton.dataset.id = index;
+        deleteButton.dataset.id = id;
         deleteButton.setAttribute('title', 'Eliminar');
         deleteButton.setAttribute('type', 'button');
 
@@ -88,4 +91,15 @@ function listTeachers() { // esto es para listar a los profesores
         tbody.appendChild(row);
         
     });
+
+}else {
+    const rowEmpty = document.createElement('tr');
+    const colEmpty = document.createElement('td');
+    colEmpty.setAttribute('colspan', '6');
+    colEmpty.textContent = "no se encuentran registros disponibles";
+    colEmpty.classList.add('text-center');
+    rowEmpty.appendChild(colEmpty);
+
+    tbody.appendChild(rowEmpty);
+}
 }
