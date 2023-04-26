@@ -3,32 +3,34 @@
 import alertify from 'alertifyjs';
 
 //own libraries
-import { validateForm } from './../utils/validation';
+import { validateForm, validateField, removeInputErrorMessage } from './../utils/validation';
+import { createEmptyRow, createActionButton } from './../utils/table';
 
 //Module libraries
 import { formElements, fieldsConfigurations, getFormData, resetForm } from './form';
-import { createTeacher, readTeachers} from './repository';
+import { createTeacher, readTeachers } from './repository';
 
 export function listeners() {
     window.addEventListener('load', () => {
         listenFormSubmitEvent();
         listTeachers();
+        listeFormFIeldsChangeEvent();
     });
 }
 
 function listenFormSubmitEvent() {
     formElements.form.addEventListener('submit', (event) => {
         event.preventDefault();
-
-        if (validateForm(fieldsConfigurations)){
-           createTeacher(getFormData());
+        alertify.dismissAll();
+        if (validateForm(fieldsConfigurations)) {
+            createTeacher(getFormData());
             resetForm();
             alertify.success('profesor guardado correctamente');
-            listTeachers(); 
+            listTeachers();
         } else {
             alertify.error('verificar los datos del formulario');
         }
- 
+
     });
 }
 
@@ -37,84 +39,101 @@ function listTeachers() { // esto es para listar a los profesores
     const tbody = document.querySelector('#tblTeachers tbody');
     tbody.innerHTML = '';
 
-    if (arrayTeachers.length > 0 ) {
+    if (arrayTeachers.length > 0) {
 
 
-    arrayTeachers.forEach( (teacher, index) => {  //foreach me retorna o recorre cada posición del objeto y su posición
+        arrayTeachers.forEach((teacher, index) => {  //foreach me retorna o recorre cada posición del objeto y su posición
 
-        const { id, name, description, email, birthDate } = teacher; // esto se llama desestructuración permite desempacar valores o arreglos o propiedades de objetos de distintas variables
-        
+            const { id, name, description, email, birthDate } = teacher; // esto se llama desestructuración permite desempacar valores o arreglos o propiedades de objetos de distintas variables
 
-        // creo la fila 
-        const row = document.createElement('tr');
-        row.classList.add('align-middle');
 
-        // creo las columnas 
-        const colId = document.createElement('td');
-        colId.textContent = id;
-        colId.classList.add('text-center');
+            // creo la fila 
+            const row = document.createElement('tr');
+            row.classList.add('align-middle');
 
-        const colName = document.createElement('td');
-        colName.textContent = name;
+            // creo las columnas 
+            const colId = document.createElement('td');
+            colId.textContent = id;
+            colId.classList.add('text-center');
 
-        const colDescription = document.createElement('td');
-        colDescription.textContent= description;
+            const colName = document.createElement('td');
+            colName.textContent = name;
 
-        const colEmail = document.createElement('td');
-        colEmail.textContent = email;
+            const colDescription = document.createElement('td');
+            colDescription.textContent = description;
 
-        const colBirthDate = document.createElement('td');
-        colBirthDate.textContent = birthDate;
+            const colEmail = document.createElement('td');
+            colEmail.textContent = email;
 
-        const colButtons = document.createElement('td');
-        colButtons.classList.add('text-center');
+            const colBirthDate = document.createElement('td');
+            colBirthDate.textContent = birthDate;
 
-        const editButton = document.createElement('button');
-        editButton.classList.add('btn', 'btn-primary', 'btn-edit', 'm-1');
-        editButton.dataset.id = id;
-        editButton.setAttribute('title', 'Editar');
-        editButton.setAttribute('type', 'button')
+            const colButtons = document.createElement('td');
+            colButtons.classList.add('text-center');
 
-        const editIcon = document.createElement('em');
-        editIcon.classList.add('fa', 'fa-pencil');
-        editButton.appendChild(editIcon);
+            const editButton = document.createElement('button');
+            editButton.classList.add('btn', 'btn-primary', 'btn-edit', 'm-1');
+            editButton.dataset.id = id;
+            editButton.setAttribute('title', 'Editar');
+            editButton.setAttribute('type', 'button')
 
-        colButtons.appendChild(editButton);
+            const editIcon = document.createElement('em');
+            editIcon.classList.add('fa', 'fa-pencil');
+            editButton.appendChild(editIcon);
 
-        const deleteButton = document.createElement('button');
-        deleteButton.classList.add('btn', 'btn-danger', 'btn-delete', 'm-1');
-        deleteButton.dataset.id = id;
-        deleteButton.setAttribute('title', 'Eliminar');
-        deleteButton.setAttribute('type', 'button');
+            colButtons.appendChild(editButton);
 
-        const deleteIcon = document.createElement('em');
-        deleteIcon.classList.add('fa', 'fa-trash',);
-        deleteButton.appendChild(deleteIcon);
+            const deleteButton = document.createElement('button');
+            deleteButton.classList.add('btn', 'btn-danger', 'btn-delete', 'm-1');
+            deleteButton.dataset.id = id;
+            deleteButton.setAttribute('title', 'Eliminar');
+            deleteButton.setAttribute('type', 'button');
 
-        colButtons.appendChild(deleteButton);
-        
+            const deleteIcon = document.createElement('em');
+            deleteIcon.classList.add('fa', 'fa-trash',);
+            deleteButton.appendChild(deleteIcon);
 
-        //agrego las columnas a la fila
-        row.appendChild(colId);
-        row.appendChild(colName);
-        row.appendChild(colDescription);
-        row.appendChild(colEmail);
-        row.appendChild(colBirthDate);
-        row.appendChild(colButtons);
+            colButtons.appendChild(deleteButton);
 
-        //agrego la fila al tbody
-        tbody.appendChild(row);
-        
-    });
 
-}else {
-    const rowEmpty = document.createElement('tr');
-    const colEmpty = document.createElement('td');
-    colEmpty.setAttribute('colspan', '6');
-    colEmpty.textContent = "no se encuentran registros disponibles";
-    colEmpty.classList.add('text-center');
-    rowEmpty.appendChild(colEmpty);
+            //agrego las columnas a la fila
+            row.appendChild(colId);
+            row.appendChild(colName);
+            row.appendChild(colDescription);
+            row.appendChild(colEmail);
+            row.appendChild(colBirthDate);
+            row.appendChild(colButtons);
 
-    tbody.appendChild(rowEmpty);
+            //agrego la fila al tbody
+            tbody.appendChild(row);
+
+        });
+
+    } else {
+        const rowEmpty = document.createElement('tr');
+        const colEmpty = document.createElement('td');
+        colEmpty.setAttribute('colspan', '6');
+        colEmpty.textContent = "no se encuentran registros disponibles";
+        colEmpty.classList.add('text-center');
+        rowEmpty.appendChild(colEmpty);
+
+        tbody.appendChild(rowEmpty);
+    }
+
 }
+
+function listeFormFIeldsChangeEvent() {
+
+    fieldsConfigurations.forEach(({ input, validations }) => {
+
+        input.addEventListener('change', () => {
+
+            removeInputErrorMessage(input);
+
+            validations.forEach((validationConfig) =>{
+                validateField(input, validationConfig);
+            })
+
+        })
+    });
 }

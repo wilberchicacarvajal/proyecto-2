@@ -2,24 +2,18 @@
 
 export function validateForm(fieldConfigurations) {
     let isValid = true;
-
+    removeErrorMessageElements();
     fieldConfigurations.forEach((fieldConfig) => {
-
         fieldConfig.validations.forEach((validationConfig) => {
-
             const currentFieldIsValid = validateField(fieldConfig.input, validationConfig);
             isValid = isValid && currentFieldIsValid;
-
         });
-
     });
-
     return isValid;
-
 }
 
 
-function validateField(input, validationConfig) {
+export function validateField(input, validationConfig) {
     const { errorId, errorMessage, validationFunction } = validationConfig;
     const fieldIsValid = validationFunction(input.value);
     if (!fieldIsValid) {
@@ -27,10 +21,10 @@ function validateField(input, validationConfig) {
         const errorMessageElement = createErrorMEssageElement(errorId, errorMessage);
         input.insertAdjacentElement('afterend', errorMessageElement);
     } else {
-            input.classList.add('is-valid');
-        }
-        return fieldIsValid;
+        input.classList.add('is-valid');
     }
+    return fieldIsValid;
+}
 
 
 /**
@@ -41,19 +35,26 @@ function validateField(input, validationConfig) {
  * @returns {HTMLDivElement} - Retorna el elemento que contiene el mensaje de error
  */
 function createErrorMEssageElement(errorId, errorMessage) {
-
     const errorMessageElement = document.createElement('div');
     errorMessageElement.classList.add('invalid-feedback');
     errorMessageElement.setAttribute('id', errorId);
     errorMessageElement.textContent = errorMessage;
     return errorMessageElement;
-
 }
 
 function removeErrorMessageElements() {
-
+    const errorMessageElement = document.querySelectorAll('.invalid-feedback');
+    errorMessageElement.forEach((element) => {
+        element.remove();
+    });
+    const inputs = document.querySelectorAll('.form-control');
+    inputs.forEach((input) => {
+        input.classList.remove('is-invalid');
+    });
 }
 
-function removeInputErrorMessage(input) {
+export function removeInputErrorMessage(input) {
+
+    let errorMessageElement = input.nextElementSibling;
 
 }
