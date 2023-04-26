@@ -28,11 +28,8 @@ export const fieldsConfigurations = [
                 // y un true cunado no debe mostrarlo
                 validationFunction: (Value) => {    // value es valor del espacio
                     return Value.trim() !== '';
-
-
                 }
             }
-
         ]
     },
 
@@ -40,33 +37,31 @@ export const fieldsConfigurations = [
         input: formElements.fields.description,
         validations: [
             {
-                erroId: `${formElements.fields.name.id}Required`, // comillas template literals
+                erroId: `${formElements.fields.name.id}Required`,
                 errorMessage: 'La descripción es obligatorio.',
-                // las validaciones retornaran un false cuando debe mostrar el mensaje de error 
-                // y un true cunado no debe mostrarlo
-                validationFunction: (Value) => {    // value es valor del espacio
+                validationFunction: (Value) => {
                     return Value.trim() !== '';
-
-
                 }
             }
-
         ]
     },
-
 
     {
         input: formElements.fields.email,
         validations: [
             {
-                erroId: `${formElements.fields.name.id}Required`, // comillas template literals
+                erroId: `${formElements.fields.name.id}Required`,
                 errorMessage: 'el email es obligatorio.',
-                // las validaciones retornaran un false cuando debe mostrar el mensaje de error 
-                // y un true cunado no debe mostrarlo
-                validationFunction: (Value) => {    // value es valor del espacio
+                validationFunction: (Value) => {
                     return Value.trim() !== '';
 
-
+                }
+            },
+            {
+                erroId: `${formElements.fields.email.id}Pattern`,
+                errorMessage: "el correo electrónico no cumple con el formato correcto.",
+                validationFunction: (value) => {
+                    return /^\w+([/.-]?\w+)*@\w+([/.-]?\w+)*(\.\w{2,3})+$/.test(value);
                 }
             }
 
@@ -77,17 +72,12 @@ export const fieldsConfigurations = [
         input: formElements.fields.birthDate,
         validations: [
             {
-                erroId: `${formElements.fields.name.id}Required`, // comillas template literals
+                erroId: `${formElements.fields.name.id}Required`,
                 errorMessage: 'La fecha es obligatorio.',
-                // las validaciones retornaran un false cuando debe mostrar el mensaje de error 
-                // y un true cunado no debe mostrarlo
-                validationFunction: (Value) => {    // value es valor del espacio
+                validationFunction: (Value) => {
                     return Value.trim() !== '';
-
-
                 }
             }
-
         ]
     }
 ]

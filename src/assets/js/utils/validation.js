@@ -42,7 +42,7 @@ function createErrorMEssageElement(errorId, errorMessage) {
     return errorMessageElement;
 }
 
-export function removeErrorMessageElements() { //
+export function removeErrorMessageElements() { 
     const errorMessageElement = document.querySelectorAll('.invalid-feedback',);
     errorMessageElement.forEach((element) => {
         element.remove();

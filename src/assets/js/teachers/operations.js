@@ -3,7 +3,7 @@
 import alertify from 'alertifyjs';
 
 //own libraries
-import { validateForm, validateField, removeInputErrorMessage, removeErrorClassNameFields } from './../utils/validation';
+import { validateForm, validateField, removeInputErrorMessage, removeErrorClassNameFields, removeErrorMessageElements } from './../utils/validation';
 import { createEmptyRow, createActionButton } from './../utils/table';
 
 //Module libraries
@@ -15,7 +15,7 @@ export function listeners() {
         listenFormSubmitEvent();
         listTeachers();
         listeFormFIeldsChangeEvent();
-        listenFormResetEvent();  //felipe
+        listenFormResetEvent();  
     });
 }
 
@@ -134,10 +134,10 @@ function listeFormFIeldsChangeEvent() {
     });
 }
 
-function listenFormResetEvent(){ //felipe
+function listenFormResetEvent() { 
     formElements.form.addEventListener('reset', () => {
-        removeErrorMessage();
-        removeErrorClassNameFields();
+        removeErrorMessageElements();
+        removeErrorClassNameFields('is-valid');
         resetForm();
         alertify.dismissAll();
     });
