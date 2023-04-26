@@ -26,13 +26,13 @@ export const fieldsConfigurations = [
                 errorMessage: 'El nombre es obligatorio.',
                 // las validaciones retornaran un false cuando debe mostrar el mensaje de error 
                 // y un true cunado no debe mostrarlo
-                validationFunction : (Value) => {    // value es valor del espacio
+                validationFunction: (Value) => {    // value es valor del espacio
                     return Value.trim() !== '';
 
-                    
+
                 }
-            } 
-            
+            }
+
         ]
     },
 
@@ -44,16 +44,54 @@ export const fieldsConfigurations = [
                 errorMessage: 'La descripción es obligatorio.',
                 // las validaciones retornaran un false cuando debe mostrar el mensaje de error 
                 // y un true cunado no debe mostrarlo
-                validationFunction : (Value) => {    // value es valor del espacio
+                validationFunction: (Value) => {    // value es valor del espacio
                     return Value.trim() !== '';
 
-                    
+
                 }
-            } 
-            
+            }
+
+        ]
+    },
+
+
+    {
+        input: formElements.fields.email,
+        validations: [
+            {
+                erroId: `${formElements.fields.name.id}Required`, // comillas template literals
+                errorMessage: 'el email es obligatorio.',
+                // las validaciones retornaran un false cuando debe mostrar el mensaje de error 
+                // y un true cunado no debe mostrarlo
+                validationFunction: (Value) => {    // value es valor del espacio
+                    return Value.trim() !== '';
+
+
+                }
+            }
+
+        ]
+    },
+
+    {
+        input: formElements.fields.birthDate,
+        validations: [
+            {
+                erroId: `${formElements.fields.name.id}Required`, // comillas template literals
+                errorMessage: 'La fecha es obligatorio.',
+                // las validaciones retornaran un false cuando debe mostrar el mensaje de error 
+                // y un true cunado no debe mostrarlo
+                validationFunction: (Value) => {    // value es valor del espacio
+                    return Value.trim() !== '';
+
+
+                }
+            }
+
         ]
     }
 ]
+
 
 export function getFormData() {
     /**

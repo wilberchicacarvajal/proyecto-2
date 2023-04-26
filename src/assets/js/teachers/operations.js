@@ -3,7 +3,7 @@
 import alertify from 'alertifyjs';
 
 //own libraries
-import { validateForm, validateField, removeInputErrorMessage } from './../utils/validation';
+import { validateForm, validateField, removeInputErrorMessage, removeErrorClassNameFields } from './../utils/validation';
 import { createEmptyRow, createActionButton } from './../utils/table';
 
 //Module libraries
@@ -15,6 +15,7 @@ export function listeners() {
         listenFormSubmitEvent();
         listTeachers();
         listeFormFIeldsChangeEvent();
+        listenFormResetEvent();  //felipe
     });
 }
 
@@ -25,6 +26,7 @@ function listenFormSubmitEvent() {
         if (validateForm(fieldsConfigurations)) {
             createTeacher(getFormData());
             resetForm();
+            removeErrorClassNameFields('is-valid');
             alertify.success('profesor guardado correctamente');
             listTeachers();
         } else {
@@ -38,7 +40,6 @@ function listTeachers() { // esto es para listar a los profesores
     const arrayTeachers = readTeachers();
     const tbody = document.querySelector('#tblTeachers tbody');
     tbody.innerHTML = '';
-
     if (arrayTeachers.length > 0) {
 
 
@@ -123,17 +124,21 @@ function listTeachers() { // esto es para listar a los profesores
 }
 
 function listeFormFIeldsChangeEvent() {
-
     fieldsConfigurations.forEach(({ input, validations }) => {
-
         input.addEventListener('change', () => {
-
             removeInputErrorMessage(input);
-
-            validations.forEach((validationConfig) =>{
+            validations.forEach((validationConfig) => {
                 validateField(input, validationConfig);
             })
-
         })
+    });
+}
+
+function listenFormResetEvent(){ //felipe
+    formElements.form.addEventListener('reset', () => {
+        removeErrorMessage();
+        removeErrorClassNameFields();
+        resetForm();
+        alertify.dismissAll();
     });
 }
