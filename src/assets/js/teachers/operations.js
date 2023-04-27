@@ -1,21 +1,23 @@
 // encargado de toda la interacción de js con html
 // Third libraries
 import alertify from 'alertifyjs';
+import Swal from 'sweetalert2';
 
 //own libraries
 import { validateForm, validateField, removeInputErrorMessage, removeErrorClassNameFields, removeErrorMessageElements } from './../utils/validation';
 import { createEmptyRow, createActionButton } from './../utils/table';
 
 //Module libraries
-import { formElements, fieldsConfigurations, getFormData, resetForm } from './form';
-import { createTeacher, readTeachers } from './repository';
+import { formElements, fieldsConfigurations, getFormData, resetForm, setFormData } from './form';
+import { createTeacher, readTeachers, findTeacherById } from './repository';
 
 export function listeners() {
     window.addEventListener('load', () => {
         listenFormSubmitEvent();
         listTeachers();
         listeFormFIeldsChangeEvent();
-        listenFormResetEvent();  
+        listenFormResetEvent();
+        listenTableClickEvent();
     });
 }
 
@@ -32,7 +34,6 @@ function listenFormSubmitEvent() {
         } else {
             alertify.error('verificar los datos del formulario');
         }
-
     });
 }
 
@@ -41,12 +42,8 @@ function listTeachers() { // esto es para listar a los profesores
     const tbody = document.querySelector('#tblTeachers tbody');
     tbody.innerHTML = '';
     if (arrayTeachers.length > 0) {
-
-
         arrayTeachers.forEach((teacher, index) => {  //foreach me retorna o recorre cada posición del objeto y su posición
-
             const { id, name, description, email, birthDate } = teacher; // esto se llama desestructuración permite desempacar valores o arreglos o propiedades de objetos de distintas variables
-
 
             // creo la fila 
             const row = document.createElement('tr');
@@ -72,30 +69,23 @@ function listTeachers() { // esto es para listar a los profesores
             const colButtons = document.createElement('td');
             colButtons.classList.add('text-center');
 
-            const editButton = document.createElement('button');
-            editButton.classList.add('btn', 'btn-primary', 'btn-edit', 'm-1');
-            editButton.dataset.id = id;
-            editButton.setAttribute('title', 'Editar');
-            editButton.setAttribute('type', 'button')
-
-            const editIcon = document.createElement('em');
-            editIcon.classList.add('fa', 'fa-pencil');
-            editButton.appendChild(editIcon);
-
+            const editButton = createActionButton({
+                buttonClass: 'btn-primary',
+                buttonClassIdentifier: 'btn-edit',
+                title: 'Editar',
+                icon: 'fa-pencil',
+                dataId: id
+            });
             colButtons.appendChild(editButton);
 
-            const deleteButton = document.createElement('button');
-            deleteButton.classList.add('btn', 'btn-danger', 'btn-delete', 'm-1');
-            deleteButton.dataset.id = id;
-            deleteButton.setAttribute('title', 'Eliminar');
-            deleteButton.setAttribute('type', 'button');
-
-            const deleteIcon = document.createElement('em');
-            deleteIcon.classList.add('fa', 'fa-trash',);
-            deleteButton.appendChild(deleteIcon);
-
+            const deleteButton = createActionButton({
+                buttonClass: 'btn-danger',
+                buttonClassIdentifier: 'btn-delete',
+                title: 'Eliminar',
+                icon: 'fa-trash',
+                dataId: id
+            });
             colButtons.appendChild(deleteButton);
-
 
             //agrego las columnas a la fila
             row.appendChild(colId);
@@ -117,10 +107,8 @@ function listTeachers() { // esto es para listar a los profesores
         colEmpty.textContent = "no se encuentran registros disponibles";
         colEmpty.classList.add('text-center');
         rowEmpty.appendChild(colEmpty);
-
         tbody.appendChild(rowEmpty);
     }
-
 }
 
 function listeFormFIeldsChangeEvent() {
@@ -134,11 +122,49 @@ function listeFormFIeldsChangeEvent() {
     });
 }
 
-function listenFormResetEvent() { 
+function listenFormResetEvent() {
     formElements.form.addEventListener('reset', () => {
         removeErrorMessageElements();
         removeErrorClassNameFields('is-valid');
         resetForm();
         alertify.dismissAll();
     });
+}
+
+function listenTableClickEvent() {
+    const table = document.getElementById('tblTeachers');
+    table.addEventListener('click', ({ target }) => {
+        const idTeacher = target.getAttribute('data-id');
+        if (target.classList.contains('btn-edit') || target.classList.contains('fa-pencil')) {
+            editTeacher(idTeacher);
+        } else if (target.classList.contains('btn-delete') || target.classList.contains('fa-trash')) {
+            Swal.fire({
+                title: '¿Estas seguro de que quieres eliminar el profesor: ?',
+                text: 'No podrás deshacer esta acción',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#b2b2b2',
+                confirmButtonText: 'si, Eliminar',
+                cancelButtonText: 'Cerrar'
+            }).then((resultConfirm) => {
+                if (resultConfirm.isConfirmed) {
+                    console.log('confirmar que elimina');
+                } else {
+                    alertify.dismissAll();
+                    alertify.message('Acción cancelada');
+                }
+            });
+        }
+    });
+}
+
+function editTeacher(idTeacher) {
+    const teacher = findTeacherById(idTeacher);
+    if (teacher) {
+        setFormData(teacher);
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+    } else {
+        alertify.error('profesor que seleccionaste no existe, verifique la información')
+    }
 }
