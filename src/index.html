@@ -18,12 +18,17 @@
         <section class="row text-center">
             <article class="col-xs-12 col-md-6 mb-3">
 
-                <img class ="img-fluid rounded" src="./assets/img/teachers.jpg" alt="profesores">
+                <img class="img-fluid rounded" src="./assets/img/teachers.jpg" alt="profesores">
 
             </article>
             <article class="col-xs-12 col-md-6">
-                
+
                 <form novalidate class="form-floating" id="teacherForm">
+
+                    <div id="containerId" class="form-floating mb-3 d-none">
+                        <input type="number" id="txtId" name="txtId" class="form-control" readonly disabled>
+                        <label for="txtId">Id del profesor</label>
+                    </div>
 
                     <div class="form-floating mb-3">
                         <input type="text" id="txtName" name="txtName" placeholder="Ejm: wilber" class="form-control">
@@ -31,27 +36,30 @@
                     </div>
 
                     <div class="form-floating mb-3">
-                        <textarea name="txtDescription" id="txtDescription" cols="30" rows="10" class="form-control"></textarea>
+                        <textarea name="txtDescription" id="txtDescription" cols="30" rows="10"
+                            class="form-control"></textarea>
                         <label for="txtDescription">Descripción</label>
                     </div>
 
                     <div class="form-floating mb-3">
-                        <input type="email" id="txtEmail" name="txtEmail" placeholder="Ejm: wilber@gmail.com" class="form-control">
+                        <input type="email" id="txtEmail" name="txtEmail" placeholder="Ejm: wilber@gmail.com"
+                            class="form-control">
                         <label for="txtEmail">correo electrónico</label>
                     </div>
 
                     <div class="form-floating mb-3">
-                        <input type="date" id="txtBirthDate" name="txtBirthDate" placeholder="Ejm: 28/11/2001" class="form-control">
+                        <input type="date" id="txtBirthDate" name="txtBirthDate" placeholder="Ejm: 28/11/2001"
+                            class="form-control">
                         <label for="txtBirthDate">Fecha de nacimiento</label>
                     </div>
 
                     <div class="row">
                         <div class="d-grid col-md-6 mb-3">
-                            <button type="reset" class="btn btn-secondary">Cancelar</button>
+                            <button type="reset" id="btnCancel" class="btn btn-secondary">Cancelar</button>
                         </div>
                         <div class="d-grid col-md-6 mb-3">
-                            <button type="submit" class="btn btn-success">Enviar</button>
-                           
+                            <button type="submit" id="btnSubmit" class="btn btn-success">Enviar</button>
+
                         </div>
                     </div>
 

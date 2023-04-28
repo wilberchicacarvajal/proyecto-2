@@ -4,11 +4,16 @@
  */
 export const formElements = {
     form: document.getElementById('teacherForm'),
+    containerId: document.getElementById('containerId'),
     fields: {
+        id: document.getElementById('txtId'),
         name: document.getElementById('txtName'),
         description: document.getElementById('txtDescription'),
         email: document.getElementById('txtEmail'),
         birthDate: document.getElementById('txtBirthDate'),
+    },
+    buttons: {
+        btnSubmit: document.getElementById('btnSubmit'),
     }
 };
 
@@ -88,7 +93,6 @@ export function getFormData() {
      * const formData = new FormData(formElements.form);
      * return Object.fromEntries(formData.entries());
      */
-
     const teacher = {
         id: new Date().getTime(),
         name: formElements.fields.name.value,
@@ -101,12 +105,27 @@ export function getFormData() {
 
 export function resetForm() {
     formElements.form.reset();
+    hideIdAndChangeElementForNew()
 }
 
 export function setFormData(teacher) {
     const { id, name, description, email, birthDate } = teacher;
+    formElements.fields.id.value = id;
     formElements.fields.name.value = name;
     formElements.fields.description.value = description;
     formElements.fields.email.value = email;
     formElements.fields.birthDate.value = birthDate;
+    showIdAndChangeElementForEdit()
+}
+
+function showIdAndChangeElementForEdit() {
+    formElements.containerId.classList.replace('d-none', 'd-block');
+    formElements.buttons.btnSubmit.classList.replace('btn-success', 'btn-primary');
+    formElements.buttons.btnSubmit.textContent = 'Modificar';
+}
+
+function hideIdAndChangeElementForNew() {
+    formElements.containerId.classList.replace('d-block', 'd-none');
+    formElements.buttons.btnSubmit.classList.replace('btn-primary', 'btn-success');
+    formElements.buttons.btnSubmit.textContent = 'enviar';
 }
