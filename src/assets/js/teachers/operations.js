@@ -9,7 +9,7 @@ import { createEmptyRow, createActionButton } from './../utils/table';
 
 //Module libraries
 import { formElements, fieldsConfigurations, getFormData, resetForm, setFormData } from './form';
-import { createTeacher, readTeachers, findTeacherById } from './repository';
+import { createTeacher, readTeachers, findTeacherById, updateTeacher, deleteTeacher } from './repository';
 
 export function listeners() {
     window.addEventListener('load', () => {
@@ -26,10 +26,17 @@ function listenFormSubmitEvent() {
         event.preventDefault();
         alertify.dismissAll();
         if (validateForm(fieldsConfigurations)) {
-            createTeacher(getFormData());
+            const teacher = getFormData();
+            const idTeacher = formElements.fields.id.value.trim();
+            if(idTeacher) {
+                updateTeacher( teacher );
+            } else {
+                createTeacher( teacher );
+            }
+           
             resetForm();
             removeErrorClassNameFields('is-valid');
-            alertify.success('profesor guardado correctamente');
+            alertify.success(` profesor ${idTeacher ? 'modificado' : 'guardado' } correctamente`);
             listTeachers();
         } else {
             alertify.error('verificar los datos del formulario');
@@ -138,29 +145,13 @@ function listenTableClickEvent() {
         if (target.classList.contains('btn-edit') || target.classList.contains('fa-pencil')) {
             editTeacher(idTeacher);
         } else if (target.classList.contains('btn-delete') || target.classList.contains('fa-trash')) {
-            Swal.fire({
-                title: '¿Estas seguro de que quieres eliminar el profesor: ?',
-                text: 'No podrás deshacer esta acción',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#b2b2b2',
-                confirmButtonText: 'si, Eliminar',
-                cancelButtonText: 'Cerrar'
-            }).then((resultConfirm) => {
-                if (resultConfirm.isConfirmed) {
-                    console.log('confirmar que elimina');
-                } else {
-                    alertify.dismissAll();
-                    alertify.message('Acción cancelada');
-                }
-            });
+            confirmDelete(idTeacher);
         }
     });
 }
 
 function editTeacher(idTeacher) {
-    const teacher = findTeacherById(idTeacher);
+    const teacher = findTeacherById(parseInt(idTeacher));
     if (teacher) {
         setFormData(teacher);
         window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -168,3 +159,32 @@ function editTeacher(idTeacher) {
         alertify.error('profesor que seleccionaste no existe, verifique la información')
     }
 }
+
+function confirmDelete(idTeacher) {
+    const teacher = findTeacherById(parseInt(idTeacher));
+    if (teacher) {
+        Swal.fire({
+            title: `¿Estas seguro de que quieres eliminar el profesor: ${teacher.name} ?`,
+            text: 'No podrás deshacer esta acción',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#b2b2b2',
+            confirmButtonText: 'si, Eliminar',
+            cancelButtonText: 'Cerrar'
+        }).then((resultConfirm) => {
+            if (resultConfirm.isConfirmed) {
+                deleteTeacher(parseInt(idTeacher));
+                listTeachers();
+                alertify.success('El registro ha sido eliminado');
+            } else {
+                alertify.dismissAll();
+                alertify.message('Acción cancelada');
+            }
+        });
+    } else {
+        alertify.error('profesor que seleccionaste no existe, verifique la información');
+    }
+}
+
+
